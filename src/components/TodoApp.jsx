@@ -18,11 +18,23 @@ export const TodoApp = () => {
   function handleSubmit(e) {
     e.preventDefault();
     const newTodo = {
+      id: crypto.randomUUID(),
       title: title,
       completed: false,
     };
     const temp = [...todos];
     temp.unshift(newTodo);
+    setTodos(temp);
+  }
+  function handleUpdate(id, value) {
+    const temp = [...todos];
+    const item = temp.find((item) => item.id == id);
+    item.title = value;
+    setTodos(temp);
+  }
+
+  function handleDelete(id) {
+    const temp = todos.filter((item) => item.id !== id);
     setTodos(temp);
   }
 
@@ -45,7 +57,13 @@ export const TodoApp = () => {
       </form>
       <div className="todoContainer">
         {todos.map((item) => (
-          <Todo item={item} />
+          // Es importante (cuando recorremos algo) poner la key porque es para ayudar a react a identificar los elementos
+          <Todo
+            key={item.id}
+            item={item}
+            onUpdate={handleUpdate}
+            onDelete={handleDelete}
+          />
         ))}
       </div>
     </div>
